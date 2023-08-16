@@ -1,0 +1,66 @@
+﻿@page "/fetchdata"
+@using System.Text.Json;
+@using System.Net.Http.Headers;
+@using System.Text;
+@inject HttpClient Http
+
+<PageTitle>NamePage</PageTitle>
+
+<h1>Greetings Service</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (name == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @*<table class="table">
+        <thead>
+            <tr>
+                <th>date</th>
+                <th>temp. (c)</th>
+                <th>temp. (f)</th>
+                <th>summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.date.toshortdatestring()</td>
+                    <td>@forecast.temperaturec</td>
+                    <td>@forecast.temperaturef</td>
+                    <td>@forecast.summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+    <h1>@name</h1>
+}
+
+@code {
+
+    private string? name;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+
+
+        var itemToPost = new NameService { Name = "tommy yall"};
+        var response = await Http.PostAsJsonAsync<NameService>("greetings", itemToPost);
+        var parsedName = await response.Content.ReadFromJsonAsync<NameService>();
+        name = parsedName!.Name;
+
+
+        
+    }
+
+    public class NameService
+    {
+        public string? Name { get; set; }   
+    }
+}
